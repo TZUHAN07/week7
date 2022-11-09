@@ -13,7 +13,7 @@ try:
     mydb = mysql.connector.connect(
         host="localhost",    # 主機名稱
         user="root",         # 帳號
-        password="",  # 密碼
+        password="j610114*",  # 密碼
         database='website'   # 資料庫名稱
     )
 except mysql.connector.Error as err:
@@ -61,7 +61,7 @@ def member_api():
                 return jsonify({"data":choose_username})
             else:
                 mycursor.close()
-                #mydb.close()
+                mydb.close()
                 return jsonify({"data":None})    
         else:
             return jsonify({"data":None})
@@ -114,7 +114,7 @@ def signup():
         mycursor.execute(insert_data, val)  # 執行sql語句
         mydb.commit()  # 提交至數據庫執行
         mycursor.close()
-        #mydb.close()
+        mydb.close()
         return render_template("firstpage.html")
 
 
@@ -160,7 +160,7 @@ def message():
     mycursor.execute(insert_data, val)
     mydb.commit()
     mycursor.close()
-    #mydb.close()
+    mydb.close()
     return redirect(url_for("sucessful"))
 
 
