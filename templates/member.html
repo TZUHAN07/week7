@@ -12,7 +12,7 @@
         <h1>歡迎光臨,這是會員頁</h1>
     </div>
     <div class="middle">
-        <h3 > {{name}} 歡迎您，成功登入系統</h3>
+        <h3 id="rename"> {{name}}，歡迎您成功登入系統</h3>
         <h3><a href="/signout">登出系統</a></h3>
         <br/>
         <hr />
@@ -83,9 +83,10 @@
                     for (const key of Object.keys(status)) {
                             console.log(key);
                             newUpdateResult.innerHTML="";
+                            rename.innerHTML="";
                             if("ok" in data){
                                 newUpdateResult.innerHTML="更新成功";
-                            }else{
+                                rename.innerHTML=name +"，歡迎您成功登入系統";                          }else{
                                 newUpdateResult.innerHTML="更新失敗";
                             }
                     }
