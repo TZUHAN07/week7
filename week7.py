@@ -13,7 +13,7 @@ try:
     mydb = mysql.connector.connect(
         host="localhost",    # 主機名稱
         user="root",         # 帳號
-        password="",  # 密碼
+        password=" ",  # 密碼
         database='website'   # 資料庫名稱
     )
 except mysql.connector.Error as err:
@@ -42,7 +42,7 @@ def sucessful():
             each_message = message[data][1]
             data += data
 
-        mycursor.close()
+        #mycursor.close()
         #mydb.close()
         return render_template("member.html", name=session["name"], each_name=each_name, each_message=each_message)
 
@@ -60,7 +60,7 @@ def member_api():
                 print(choose_username)
                 return jsonify({"data":choose_username})
             else:
-                mycursor.close()
+                #mycursor.close()
                 mydb.close()
                 return jsonify({"data":None})    
         else:
@@ -68,27 +68,23 @@ def member_api():
 
     if request.method == "PATCH":
         name = request.get_json()
-        username=session["username"]
         print(name)
+        username=session["username"]
         if session.get("username"):
             mycursor = mydb.cursor(buffered=True)
-            mycursor.execute("UPDATE member SET name= %s WHERE username= %s", (name,username))
+            mycursor.execute("UPDATE member SET name= %s WHERE username= %s", (name["name"],username))
             mydb.commit()  # 提交至數據庫執行
-            print("success")
             
-            newnames=mycursor.fetchone()
-            newname={"name":newnames[0]}
-            session["name"] = newname[name]
-            print(session["name"])
+            session.name =name["name"]
             mycursor.close()
-            print(newname)
-            response=make_response(jsonify(name))
+            response=make_response(jsonify(name),200)
             print(response)
-            return jsonify({"ok":"true"}) 
+            return jsonify(ok=True) 
         else:
-            return jsonify({"error":"true"})
+            return jsonify(error=True)
 
                
+
 @app.route("/error")  # 建立/error對應的處理函式
 def geterror():
     message = request.args["message"]
@@ -111,7 +107,7 @@ def signup():
         insert_data = (
             "INSERT INTO member (name, username,password) VALUES (%s,%s,%s)")
         val = (name, username, password)
-        mycursor.execute(insert_data, val)  # 執行sql語句
+        mycursor.execute(insert_data, val)
         mydb.commit()  # 提交至數據庫執行
         mycursor.close()
         mydb.close()
