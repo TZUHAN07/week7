@@ -73,25 +73,23 @@
                 body: JSON.stringify( { name: name } ),
                 cache:"no-cache" 
             }).then(function (response) {
-                    return response.json();//解析成一個json 物件
-                }).then(function (data) {
-                    console.log(data);
-
+                    if (response.ok) {
+                        return response.json();
+                    }                 
+            }).then(function (data) {
+                    console.log(data);  
                     let newUpdateResult = document.getElementById("updateResult");
+                    let newrename = document.getElementById("rename");
                     let status=Object.keys(data);
-                    console.log(status)
-                    for (const key of Object.keys(status)) {
-                            console.log(key);
-                            newUpdateResult.innerHTML="";
-                            rename.innerHTML="";
-                            if("ok" in data){
-                                newUpdateResult.innerHTML="更新成功";
-                                rename.innerHTML=name +"，歡迎您成功登入系統";                            
-                            }else{newUpdateResult.innerHTML="更新失敗";
-                            }
-                    }
-                });      
-        };
+                    newUpdateResult.innerHTML="";
+                    newUpdateResult.innerHTML="更新成功";
+                        rename.innerHTML=name +"，歡迎您成功登入系統";  
+                
+            }).catch(function(error) {
+                console.log(error);
+                newUpdateResult.innerHTML="更新失敗";
+            }) 
+        }; 
         
     </script>
 
