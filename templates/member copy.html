@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Flask 網頁</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="top">
+        <h1>歡迎光臨,這是會員頁</h1>
+    </div>
+    <div class="middle">
+        <h3 id="rename"> {{name}}，歡迎您成功登入系統</h3>
+        <h3><a href="/signout">登出系統</a></h3>
+        <br/>
+        <hr />
+        <form action="/message" method="POST">
+            <h3>快來留言~</h3>
+                內容 <input type="text" name="message" placeholder="留言"/> <button>送出</button>
+            <br />
+        </form>
+        <h3>{{each_name}} : {{each_message}}</h3>
+        <hr />
+       
+        <h3>查詢會員姓名</h3>
+        <h3><input type="text" id ="username" name="username" placeholder="會員姓名"/> <button onclick="getData();">查詢</button></h3> 
+        <div id="result"> </div>
+        <br/>
+        <h3>更新我的姓名</h3>
+        <h3><input type="text" id ="name" name="name" placeholder="輸入新會員姓名"/> <button onclick="getNewData();">更新</button></h3> 
+        <div><h3 id="updateResult"></h3> </div>
+        <hr/>
+    </div>
+    <script>
+        function getData(){
+            const username = document.getElementById("username").value;
+            fetch("http://127.0.0.1:3000/api/member?username="+username)
+                .then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    console.log(data);
+                    //let result=document.querySelector("#result");
+                    //result.innerHTML="";
+                    //    if( data.data != null ){
+                    //        result.innerHTML+="<h3>"+data.data.name+"("+data.data.username+")</h3>";
+                    //    }else {
+                    //        result.innerHTML+="<h3>查無此人</h3>";
+                    //    }
+                    
+                    let newH3 = document.createElement("h3");
+                    let result = document.getElementById("result");
+                    result.innerHTML="";//設空值讓資料不會一直疊加
+                        if( data.data != null ){
+                            result.appendChild(newH3);
+                            var newtext = document.createTextNode(data.data.name+"("+data.data.username+")");
+                            newH3.appendChild(newtext);
+                        }else{
+                            result.appendChild(newH3);
+                            var newtext = document.createTextNode("查無此人");
+                            newH3.appendChild(newtext);
+                        }
+                });       
+        };
+
+        function getNewData(){
+            const name = document.getElementById("name").value;
+            fetch("http://127.0.0.1:3000/api/member",{
+                method:"PATCH",
+                credentials: 'include', 
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify( { name: name } ),
+                cache:"no-cache" 
+            }).then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                           
+            }).then(function (data) {
+                    console.log(data);  
+                    let newUpdateResult = document.getElementById("updateResult");
+                    let newrename = document.getElementById("rename");
+                    newUpdateResult.innerHTML="";
+                    newUpdateResult.innerHTML="更新成功";
+                        rename.innerHTML=name +"，歡迎您成功登入系統";  
+        
+            }).catch(function(error) {
+                console.log(error);
+                newUpdateResult.innerHTML="更新失敗";
+            }) 
+        }; 
+        
+    </script>
+
+</body>
+</html>

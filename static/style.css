@@ -1,0 +1,27 @@
+body {
+    margin: 0px 0px 0px 0px;
+    /*讓左右兩旁不要留空白*/
+}
+
+.top {
+    background-color: #304c89;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    color: azure
+}
+
+
+h3 {
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
